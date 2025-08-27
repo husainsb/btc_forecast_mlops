@@ -1,0 +1,16 @@
+# Use official python image as a base
+FROM python:3.12.11-slim
+
+# Install Python dependencies
+COPY ./requirements.txt .
+RUN pip install --upgrade pip && pip install --no-cache-dir -r requirements.txt
+
+# Copy application code
+COPY . /model
+WORKDIR /model
+
+# Expose FastAPI default port
+EXPOSE 8000
+
+# Start FastAPI server using Uvicorn
+CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8000"]
