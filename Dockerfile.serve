@@ -1,4 +1,5 @@
 # Use official python image as a base
+FROM --platform=linux/arm64 debian:latest
 FROM python:3.12.11-slim
 
 # Install Python dependencies
