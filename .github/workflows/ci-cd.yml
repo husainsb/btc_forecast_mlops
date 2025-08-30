@@ -19,8 +19,12 @@ jobs:
         with:
           python-version: 3.12.11
 
+      - name: Set up QEMU
+        # Required for building arm64 images on an amd64 runner
+        uses: docker/setup-qemu-action@v3
+
       - name: Build Docker image
-        run: docker buildx build -f Dockerfile.serve --platform=linux/arm64 -t ${{ secrets.DOCKER_USERNAME }}/fastapi-mlflow:${{ github.sha }} .
+        run: docker buildx build -f Dockerfile.serve --platform=linux/arm64,linux/amd64 -t ${{ secrets.DOCKER_USERNAME }}/fastapi-mlflow:${{ github.sha }} .
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
