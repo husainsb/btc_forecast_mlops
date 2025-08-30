@@ -3,7 +3,7 @@ name: CI/CD Pipeline
 on:
   push:
     branches:
-      - fastapi_app
+      #- fastapi_app
   pull_request:
 
 jobs:
@@ -17,14 +17,10 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: 3.12.11
-
-      - name: Set up QEMU
-        # Required for building arm64 images on an amd64 runner
-        uses: docker/setup-qemu-action@v3
+          python-version: '3.12.11'
 
       - name: Build Docker image
-        run: docker build -f Dockerfile.serve -t ${{ secrets.DOCKER_USERNAME }}/fastapi-mlflow:${{ github.sha }} .
+        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/fastapi-mlflow:${{ github.sha }} .
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
