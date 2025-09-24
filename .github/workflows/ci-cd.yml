@@ -5,14 +5,18 @@ on:
     branches:
       - fastapi_app
   pull_request:
-
+  
+env:
+  # Change this to your repo: e.g. yourname/yourapp or yourorg/yourapp
+  IMAGE_NAME: ${{ secrets.DOCKER_USERNAME }}/fastapi-mlflow
+  
 jobs:
   build-test:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       # Enable QEMU for cross-architecture builds
       - name: Set up QEMU
@@ -24,19 +28,36 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.12.11'
-
-      - name: Build Docker image
-        run: docker buildx build -t ${{ secrets.DOCKER_USERNAME }}/fastapi-mlflow:${{ github.sha }} --platform=linux/arm64 .
-
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Push Docker image
-        run: docker push ${{ secrets.DOCKER_USERNAME }}/fastapi-mlflow:${{ github.sha }}
+      # Generates smart tags and labels (latest on default branch, semver on tags, sha tag)
+      - name: Extract Docker metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.IMAGE_NAME }}
+          tags: |
+            type=raw,value=latest,enable={{is_default_branch}}
+            type=ref,event=branch
+            type=ref,event=tag
+            type=sha
+
+      - name: Build and push (ARM64)
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: /artifacts/Dockerfile
+          # Single-arch ARM64 build
+          platforms: linux/arm64
+          push: true
+          # Build cache to speed up subsequent builds
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          # Turn off provenance if you don't need SBOM/attestations
+          provenance: false
