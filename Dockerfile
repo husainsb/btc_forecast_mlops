@@ -1,6 +1,15 @@
+ARG PYTHON_VERSION=3.12.11
+FROM python:${PYTHON_VERSION}-slim-bookworm AS runtime
+
+ENV DEBIAN_FRONTEND=noninteractive \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    PIP_NO_CACHE_DIR=1
+
 # Use official python image as a base
-FROM python:3.12.11-slim
-RUN apt-get update && apt-get install -y build-essential
+#FROM python:3.12.11-slim
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential libopenblas-dev git && rm -rf /var/lib/apt/lists/*
 
 # Install Python dependencies
 COPY ./requirements.txt .
