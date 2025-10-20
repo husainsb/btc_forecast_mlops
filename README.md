@@ -63,13 +63,14 @@ project/
    - Deploy on local Kubernetes for scalability
 4. **CI/CD**
    - GitHub Actions builds Docker image and pushes to Docker Hub. The architecture is 'arm64' as my machine is MacOS
+   - Pull the image from Dockerhub and instantiate a K8s deployment & service on top of this
      [![CI/CD Pipeline](https://github.com/husainsb/btc_forecast_mlops/actions/workflows/ci-cd.yml/badge.svg?branch=fastapi_app)](https://github.com/husainsb/btc_forecast_mlops/actions/workflows/ci-cd.yml)
 5. **Load Testing**
    - Inference will be done using Predict method of model
-   - Stress test the App using Locust. Peak concurrency of 1000 requests(users).
+   - Stress test the App using Locust. E.g: Peak concurrency of 1000 requests(users).
    - Obeserve the Load Balancing of K8s service and its impact on API response time & Requests per Second (RPS)
 6. **Horizontal Scaling w/o Downtime**
-   - Kubernetes scales pods based on traffic and w/o causing the downtime
+   - Kubernetes can scale pods w/o causing the downtime and traffic will be routed using built-in Load Balancer
 
 ---
 
@@ -122,12 +123,11 @@ locust
 ✔ FastAPI Deployment with Docker & Kubernetes  
 ✔ CI/CD with GitHub Actions  
 ✔ Load Testing with Locust  
-✔ Horizontal Scaling  
+✔ Horizontal Scaling via K8s
 
 ---
 
 ### **📈 Future Enhancements**
+- Provision to detect model/data/performance drift
 - Add **Prometheus + Grafana** for monitoring
-- Implement **Airflow** for orchestration
-
 
