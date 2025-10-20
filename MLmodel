@@ -1,15 +1,18 @@
-artifact_path: file:///Users/husainsb/Documents/btc_forecast/ingest_train_project/ingest_train/mlflow_main/mlruns/619964082743589016/models/m-c67135bed8fd445db7d225b70475e39b/artifacts
+artifact_path: file:///Users/husainsb/Documents/btc_forecast/ingest_train_project/ingest_train/mlflow_main/mlruns/619964082743589016/models/m-ba255d6ed83a4da7acd46b96740487d3/artifacts
 flavors:
   python_function:
     artifacts:
+      model:
+        path: artifacts/model.keras
+        uri: /var/folders/7j/tlcy1x9d50v62qwtmr910b100000gn/T/tmpcv1slbym/model.keras
       scaler_x:
         path: artifacts/scaler_x.pkl
-        uri: ./scaler_x.pkl
+        uri: /var/folders/7j/tlcy1x9d50v62qwtmr910b100000gn/T/tmpcv1slbym/scaler_x.pkl
       scaler_y:
         path: artifacts/scaler_y.pkl
-        uri: ./scaler_y.pkl
+        uri: /var/folders/7j/tlcy1x9d50v62qwtmr910b100000gn/T/tmpcv1slbym/scaler_y.pkl
     cloudpickle_version: 3.1.1
-    code: null
+    code: 
     env:
       conda: conda.yaml
       virtualenv: python_env.yaml
@@ -19,14 +22,15 @@ flavors:
     streamable: false
 is_signature_from_type_hint: false
 mlflow_version: 3.1.4
-model_id: m-c67135bed8fd445db7d225b70475e39b
-model_size_bytes: 2482900
-model_uuid: m-c67135bed8fd445db7d225b70475e39b
+model_id: m-ba255d6ed83a4da7acd46b96740487d3
+model_size_bytes: 2482153
+model_uuid: m-ba255d6ed83a4da7acd46b96740487d3
 prompts: null
+run_id: d89954d2217a484fb0c06b6ca925d7ea
 signature:
   inputs: '[{"type": "tensor", "tensor-spec": {"dtype": "float64", "shape": [-1, 4]}}]'
   outputs: '[{"type": "tensor", "tensor-spec": {"dtype": "float64", "shape": [-1,
     5]}}]'
   params: null
 type_hint_from_example: false
-utc_time_created: '2025-08-15 18:11:31.255021'
+utc_time_created: '2025-10-18 08:42:07.095657'
