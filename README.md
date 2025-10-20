@@ -75,30 +75,45 @@ project/
 
 ### **🚀 How to Run**
 #### **Local**
+#### **Pull the image from Dockerhub & Run the container**
 ```bash
-# Clone repo
-git clone <repo-url>
-cd project
-
-# Install dependencies
-pip install -r requirements.txt
-
-# Run FastAPI app
-uvicorn codes.app:app --reload
+# This image is built for arm64 or MacOS version
+docker pull husainsb/fastapi-mlflow:fastapi_app
+docker run -p 5001:8000 husainsb/fastapi-mlflow:fastapi_app
 ```
 
-#### **Docker**
+#### **Kubernetes Deployment & Serving**
 ```bash
-docker build -t <your-dockerhub-username>/bitcoin-forecast .
-docker run -p 8000:8000 <your-dockerhub-username>/bitcoin-forecast
-```
-
-#### **Kubernetes**
-```bash
+cd k8s_folder/   # point to directory containing K8s related files
 kubectl apply -f k8s_folder/fastapi-app-deployment.yaml
 kubectl apply -f k8s_folder/fastapi-app-expose.yaml
-```
 
+# check whether Pods and services are up
+kubectl get events
+kubectl get pods
+kubectl get deployment
+kubectl config view
+
+# horizontally scale the app to include 5 pods
+kubectl scale --replicas=5 deployment/fastapi-deployment
+
+# delete service & deployment to free up resources
+kubectl delete service fastapi-service  
+kubectl delete deployment fastapi-deployment 
+```
+![K8s Deployment](/images/k8s_deployment.png "Kubernetes Deployment")
+
+#### **Stress testing of App**
+```bash
+source .venv/bin/activate   # replace with your Python env directory
+cd codes/  # path to directory of locustfile.py
+locust
+# This will initiate Locust app on localhost:8089 by default
+# Set the parameters like URL, No. of peak users, Ramp-up users etc to test the App
+```
+![Locust Initialization](/images/locust_intialization.png "Initial parameters for Stress testing")
+![Stress Test](/images/locust_stats.png "Statistics related to Stress testing")
+![Performance Charts](/images/locust_charts.png "Performance Charts while Stress testing")
 ---
 
 ### **✅ Features**
